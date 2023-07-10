@@ -1,39 +1,48 @@
-﻿using System.IO;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 
-class Program
+namespace Quiz
 {
-    static void Main(string[] args)
+}  internal class Program
     {
-        string sourcePath = @"C:\Users\tdarr\OneDrive\Desktop\Test"; // Replace with your source folder path
-        string destinationPath = @"C:\Users\tdarr\OneDrive\Desktop\Test 2"; // Replace with your destination folder path
-
-        string fileName = "Original.txt"; // Replace with the name of the file you want to move
-
-        string sourceFile = Path.Combine(sourcePath, fileName);
-        string destinationFile = Path.Combine(destinationPath, fileName);
-
-        // Check if the source file exists
-        if (File.Exists(sourceFile))
+        static void Main(string[] args)
         {
-            // Check if the destination file already exists
-            if (File.Exists(destinationFile))
-            {
-                Console.WriteLine("The file {0} already exists in the destination folder.", fileName);
-            }
-            else
-            {
-                // Move the file to the destination folder
-                File.Move(sourceFile, destinationFile);
-                Console.WriteLine("The file {0} has been moved to the destination folder.", fileName);
-                Console.Beep();
-            }
-        }
-        else
-        {
-            Console.WriteLine("The file {0} does not exist in the source folder.", fileName);
-        }
+            string sourceDirectory = @"C:\Users\tdarr\OneDrive\Desktop\Test"; // Replace with the path to the source directory containing the zip files
+            string destinationDirectory = @"C:\Users\tdarr\OneDrive\Desktop\Test 2"; // Replace with the path to the destination directory
 
-        Console.ReadLine();
+            try
+            {
+                string[] zipFiles = Directory.GetFiles(sourceDirectory, "*.zip"); // Get all zip files in the source directory
+
+                foreach (string zipFile in zipFiles)
+                {
+                    string fileName = Path.GetFileName(zipFile);
+                    string destinationPath = Path.Combine(destinationDirectory, fileName);
+
+                    File.Move(zipFile, destinationPath); // Move the zip file to the destination directory
+
+                    ZipFile.ExtractToDirectory(destinationPath, destinationDirectory); // Extract the zip file to the destination directory
+
+                    Console.WriteLine($"Successfully moved and extracted {fileName}");
+                }
+
+                Console.WriteLine("All files moved and extracted successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while moving and extracting files: " + ex.Message);
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+        }
     }
-}
